@@ -1,0 +1,33 @@
+{
+  "ingest_schema": "KKAT-CTX-v1",
+  "schema_version": "1.0",
+  "project": {
+    "name": "KKAT",
+    "repo": "khoa2323/KKAT",
+    "language": "JavaScript",
+    "commit_anchor": "5b82698be503a13c86282f6b3b58af0a8cfa8f5f",
+    "timestamp": "2026-09-12T00:00:00Z"
+  },
+  "tl_dr": "Dự án web JS 'KKAT'. Mục tiêu: hoàn thiện UI form config.js và đồng bộ ngữ cảnh AI.",
+  "current_goals": [
+    "Review config.js fields and placeholders",
+    "Add README_CONTEXT.md to repo root",
+    "Establish manual AI context ingestion process"
+  ],
+  "tasks": [
+    {"id": 1, "title": "Review config.js fields", "status": "in-progress", "note": "window.APP_CONFIG fields defined"},
+    {"id": 2, "title": "Create README_CONTEXT.md", "status": "todo", "note": "Local/repo context file for Copilot"}
+  ],
+  "important_files": [
+    {
+      "path": "config.js",
+      "summary": "Form input configuration",
+      "snippet": "window.APP_CONFIG = [ { key: 'nguoi_nhan', label: 'Tên người nhận', type: 'text', placeholder: 'Nhập tên người nhận...' }, { key: 'loi_chuc', label: 'Lời chúc sinh nhật', type: 'textarea', placeholder: 'Nhập lời chúc...' }, { key: 'anh_nen', label: 'Link ảnh kỷ niệm', type: 'text', placeholder: 'Dán link ảnh tại đây...' } ]"
+    }
+  ],
+  "constraints": {
+    "max_summary_words": 300,
+    "max_snippet_tokens": 300
+  },
+  "context_version": 1
+}
