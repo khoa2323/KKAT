@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KKAT — Form</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <h1>KKAT — Form cấu hình</h1>
+    <div id="form-root"></div>
+  </main>
+
+  <!-- Load project config first -->
+  <script src="config.js"></script>
+  <!-- Load renderer + validator -->
+  <script src="app.js"></script>
+
+  <!-- Initialize rendering after scripts loaded -->
+  <script>
+    // Render form from the global window.APP_CONFIG
+    if (window.APP_CONFIG && Array.isArray(window.APP_CONFIG)) {
+      renderForm(window.APP_CONFIG, 'form-root');
+    } else {
+      document.getElementById('form-root').textContent = 'Không tìm thấy window.APP_CONFIG';
+    }
+  </script>
+</body>
+</html>
