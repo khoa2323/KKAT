@@ -45,9 +45,48 @@ window.APP_CONFIG = [
     ariaDescribedBy: 'help-anh-nen',
     example: 'https://example.com/photo.jpg',
     validation: {
-      pattern: '^(https?:\\/\\/).+\\.(jpg|jpeg|png|gif|webp)$',
+      pattern: '^(https?:\\/\\/).+\\.(jpg|jpeg|png|gif|webp)(\\?.*)?(#.*)?$',
       message: 'Vui lòng nhập một URL ảnh hợp lệ (jpg, png, gif, webp).'
     },
     help: 'URL công khai; nếu muốn upload file, dùng tính năng upload.'
   }
 ];
+
+// Templates for different page types (bio, event, product)
+window.APP_TEMPLATES = {
+  bio: {
+    key: 'bio',
+    label: 'Trang cá nhân',
+    fields: [
+      { key: 'name', label: 'Họ và tên', type: 'text', required: true },
+      { key: 'avatar', label: 'Avatar URL', type: 'url', required: false },
+      { key: 'bio', label: 'Tiểu sử', type: 'textarea', required: false },
+      { key: 'facebook', label: 'Facebook', type: 'url', required: false },
+      { key: 'tiktok', label: 'TikTok', type: 'url', required: false }
+    ]
+  },
+  event: {
+    key: 'event',
+    label: 'Trang sự kiện',
+    fields: [
+      { key: 'title', label: 'Tiêu đề', type: 'text', required: true },
+      { key: 'time', label: 'Thời gian', type: 'text', required: true },
+      { key: 'desc', label: 'Mô tả', type: 'textarea', required: false },
+      { key: 'banner', label: 'Banner URL', type: 'url', required: false }
+    ]
+  },
+  product: {
+    key: 'product',
+    label: 'Trang sản phẩm',
+    fields: [
+      { key: 'pname', label: 'Tên sản phẩm', type: 'text', required: true },
+      { key: 'price', label: 'Giá', type: 'text', required: true },
+      { key: 'pdesc', label: 'Mô tả', type: 'textarea', required: false },
+      { key: 'pimg', label: 'Ảnh sản phẩm', type: 'url', required: false },
+      { key: 'buylink', label: 'Link mua', type: 'url', required: false }
+    ]
+  }
+};
+
+// context version for agents
+window.CONFIG_CONTEXT_VERSION = 2;
