@@ -6,6 +6,11 @@
 //  - Attach client-side validation on submit and input events
 //  - Display errors in element with role="alert" and aria-live="assertive"
 
+// ===== SUPABASE INITIALIZATION =====
+const SUPABASE_URL = 'https://rkrmfyicbexyvuudltou.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrcm1meWljYmV4eXZ1dWRsdG91Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyNzk2OTQsImV4cCI6MjEwNDg1NTY5NH0.Sxge6X8_OQmaprLLQEDjcdxAynJzXtpzTMIkE1hD0I4';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 function renderForm(configArray, containerId) {
   const container = document.getElementById(containerId);
   if (!container) throw new Error('Container not found: ' + containerId);
@@ -109,20 +114,53 @@ function attachValidationHandlers(form, configArray) {
     if (!target || !target.dataset || !target.dataset.fieldMeta) return;
     clearFieldError(target);
   });
-
-  // On submit: validate all fields
-  form.addEventListener('submit', (ev) => {
+  // On submit: validate all fields and save to Supabase
+  form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
     const isValid = validateForm(form);
     if (!isValid) return;
-    // Collect form data and proceed (example: console.log or send)
+
+    // Disable submit button to prevent double-submit
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Äang lÆ°u...';
+    }
+
+    // Collect form data
     const data = {};
     const elements = Array.from(form.elements).filter(el => el.name);
     elements.forEach(el => data[el.name] = el.value);
-    // Example success handler: replace this with actual submit logic
     console.log('Form valid. Payload:', data);
-    // show a simple success message
-    alert('Dữ liệu hợp lệ — kiểm tra console để xem payload.');
+
+    try {
+      // Save to Supabase
+      const { data: inserted, error } = await supabase
+        .from('cards')
+        .insert({
+          recipient: data['nguoi_nhan'] || null,
+          message: data['loi_chuc'] || null,
+          image_url: data['anh_nen'] || null
+        })
+        .select('id')
+        .single();
+
+      if (error) throw error;
+
+      const cardId = inserted.id;
+      console.log('Card saved to Supabase. ID:', cardId);
+
+      // Redirect to view page
+      window.location.href = `view.html?id=${cardId}`;
+    } catch (err) {
+      console.error('Supabase save error:', err);
+      alert('LÆ°u thiá»‡p tháº¥t báº¡i: ' + (err.message || 'Lá»—i khÃ´ng xÃ¡c Ä‘á»‹nh'));
+      // Re-enable submit button
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Gá»­i';
+      }
+    }
   });
 
   // Attach live preview listeners
