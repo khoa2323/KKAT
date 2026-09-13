@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KKAT — Xem thiệp</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="view-body">
+
+  <!-- Loading state -->
+  <div id="loading-state" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Đang tải thiệp...</p>
+  </div>
+
+  <!-- Error state -->
+  <div id="error-state" class="error-container" style="display: none;">
+    <div class="error-icon">😕</div>
+    <h1 class="error-title" id="error-title">Không tìm thấy thiệp</h1>
+    <p class="error-message" id="error-message">Thiệp bạn đang tìm không tồn tại hoặc đã bị xóa.</p>
+    <a href="index.html" class="btn-back">← Về trang chủ</a>
+  </div>
+
+  <!-- Card display -->
+  <div id="card-display" class="card-display" style="display: none;">
+    <div id="card-image" class="card-display-image"></div>
+    <div class="card-display-content">
+      <p class="card-display-label">Gửi đến</p>
+      <h1 class="card-display-recipient" id="card-recipient">_____</h1>
+      <p class="card-display-message" id="card-message">Lời chúc...</p>
+      <p class="card-display-date" id="card-date"></p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="view.js"></script>
+</body>
+</html>
