@@ -33,8 +33,10 @@ function renderForm(configArray, containerId) {
       // rows handling
       if (field.rows) input.rows = field.rows;
     } else {
-      // map 'url' to input type url, fallback to text
-      const type = (field.type === 'url') ? 'url' : (field.type || 'text');
+      // Use 'text' type for all inputs to prevent browser sanitization
+      // (e.g., input[type="url"] sanitizes invalid URLs to empty string)
+      // Validation is handled by JavaScript in validateField()
+      const type = 'text';
       input = document.createElement('input');
       input.type = type;
     }
@@ -42,7 +44,9 @@ function renderForm(configArray, containerId) {
     input.id = id;
     input.name = field.key || id;
     if (field.placeholder) input.placeholder = field.placeholder;
-    if (field.maxLength) input.maxLength = field.maxLength;
+    // Note: We don't set HTML maxlength attribute because it truncates
+    // the input value, preventing JS maxLength validation from triggering.
+    // maxLength validation is handled in validateField() instead.
     if (field.required) input.required = true;
 
     // Accessibility attributes

@@ -15,8 +15,8 @@ test.describe('KKAT form E2E', () => {
     const loiChucTag = await page.locator('#input-loi-chuc').evaluate(e => e.tagName.toLowerCase());
     expect(loiChucTag).toBe('textarea');
     const anhNenType = await page.locator('#input-anh-nen').evaluate(e => e.type || e.tagName.toLowerCase());
-    // anh_nen should be input[type=url]
-    expect(anhNenType).toBe('url');
+    // anh_nen should be input[type=text] (not type=url, to avoid browser sanitization)
+    expect(anhNenType).toBe('text');
   });
 
   test('Required validation and focus', async ({ page }) => {
