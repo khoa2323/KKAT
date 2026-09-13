@@ -38,11 +38,11 @@ test.describe('KKAT form E2E', () => {
 
   test('MaxLength and pattern validation', async ({ page }) => {
     await page.goto(BASE);
-    // Make loi_chuc too long
-    const long = 'a'.repeat(501);
+    // Make loi_chuc too long (600 chars > maxLength)
+    const long = 'a'.repeat(600);
     await page.fill('#input-loi-chuc', long);
-    // invalid image URL (no extension)
-    await page.fill('#input-anh-nen', 'https://example.com/image');
+    // invalid image URL (not a valid URL)
+    await page.fill('#input-anh-nen', 'not-a-valid-url');
     await page.click('button[type="submit"]');
     await expect(page.locator('#input-loi-chuc-error')).toBeVisible();
     await expect(page.locator('#input-anh-nen-error')).toBeVisible();
