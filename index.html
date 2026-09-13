@@ -15,10 +15,35 @@
   </header>
 
   <main class="page-main">
-    <section class="form-section" aria-labelledby="form-heading">
-      <h2 id="form-heading" class="visually-hidden">Form nhập liệu</h2>
-      <div id="form-root"></div>
-    </section>
+    <div class="layout-grid">
+      <section class="form-section" aria-labelledby="form-heading">
+        <h2 id="form-heading" class="visually-hidden">Form nhập liệu</h2>
+        <div id="form-root"></div>
+        <div class="share-row">
+          <button type="button" id="btn-copy-share" class="btn-share">Sao chép link chia sẻ</button>
+          <span id="share-feedback" class="share-feedback" aria-live="polite"></span>
+        </div>
+      </section>
+
+      <section class="preview-section" aria-labelledby="preview-heading">
+        <h2 id="preview-heading" class="preview-title">Xem trước thiệp</h2>
+        <div id="preview-card" class="preview-card">
+          <div class="preview-image" id="preview-image-wrap">
+            <div class="preview-image-placeholder" id="preview-image-placeholder">
+              <span class="placeholder-icon">🖼️</span>
+              <span class="placeholder-text">URL ảnh nền sẽ hiển thị ở đây</span>
+            </div>
+          </div>
+          <div class="preview-content">
+            <p class="preview-label">Gửi đến</p>
+            <h3 class="preview-recipient" id="preview-recipient">_____</h3>
+            <div class="preview-message-wrap">
+              <p class="preview-message" id="preview-message">Lời chúc của bạn sẽ xuất hiện ở đây...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
 
   <footer class="page-footer">

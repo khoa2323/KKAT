@@ -124,6 +124,12 @@ function attachValidationHandlers(form, configArray) {
     // show a simple success message
     alert('Dữ liệu hợp lệ — kiểm tra console để xem payload.');
   });
+
+  // Attach live preview listeners
+  attachPreviewListeners(form);
+
+  // Prefill from URL params if present
+  prefillFromURL(form);
 }
 
 // Validate entire form; returns true if all valid
@@ -237,4 +243,162 @@ function isValidImageUrl(urlStr) {
   } catch (e) {
     return false;
   }
+}
+
+// ===== LIVE PREVIEW =====
+
+/**
+ * Attach input listeners to form fields to update live preview
+ */
+function attachPreviewListeners(form) {
+  // Listen for input events on all form fields
+  const fields = form.querySelectorAll('[name]');
+  fields.forEach(field => {
+    field.addEventListener('input', () => updatePreview());
+    field.addEventListener('change', () => updatePreview());
+  });
+
+  // Initial preview
+  updatePreview();
+
+  // Copy share link button
+  const copyBtn = document.getElementById('btn-copy-share');
+  const feedback = document.getElementById('share-feedback');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      const url = buildShareURL();
+      copyToClipboard(url, feedback);
+    });
+  }
+}
+
+/**
+ * Update the preview card based on current form values
+ */
+function updatePreview() {
+  const recipient = document.getElementById('preview-recipient');
+  const message = document.getElementById('preview-message');
+  const imageWrap = document.getElementById('preview-image-wrap');
+  const placeholder = document.getElementById('preview-image-placeholder');
+
+  // Gather current form values by name
+  const getVal = (key) => {
+    const el = document.querySelector(`[name="${key}"]`);
+    return el ? (el.value || '').trim() : '';
+  };
+
+  const recipientVal = getVal('nguoi_nhan');
+  const messageVal = getVal('loi_chuc');
+  const imageVal = getVal('anh_nen');
+
+  // Update recipient
+  if (recipient) {
+    recipient.textContent = recipientVal || '_____';
+    recipient.style.opacity = recipientVal ? '1' : '0.5';
+  }
+
+  // Update message
+  if (message) {
+    if (messageVal) {
+      message.textContent = messageVal;
+      message.classList.add('preview-message-filled');
+    } else {
+      message.textContent = 'Lời chúc của bạn sẽ xuất hiện ở đây...';
+      message.classList.remove('preview-message-filled');
+    }
+  }
+
+  // Update background image
+  if (imageWrap && placeholder) {
+    if (imageVal && isValidImageUrl(imageVal)) {
+      // Set background image
+      imageWrap.style.backgroundImage = `url('${imageVal}')`;
+      placeholder.style.display = 'none';
+    } else {
+      imageWrap.style.backgroundImage = '';
+      placeholder.style.display = '';
+    }
+  }
+}
+
+// ===== URL SHARE =====
+
+/**
+ * Build a share URL with form data encoded as query params
+ * @returns {string} Full URL with params
+ */
+function buildShareURL() {
+  const form = document.querySelector('form');
+  if (!form) return window.location.href;
+
+  const params = new URLSearchParams();
+  const fields = form.querySelectorAll('[name]');
+  fields.forEach(field => {
+    const val = (field.value || '').trim();
+    if (val) {
+      params.set(field.name, val);
+    }
+  });
+
+  const base = window.location.origin + window.location.pathname;
+  const queryString = params.toString();
+  return queryString ? `${base}?${queryString}` : base;
+}
+
+/**
+ * Copy text to clipboard with fallback
+ */
+function copyToClipboard(text, feedbackEl) {
+  const showFeedback = (msg, isError) => {
+    if (!feedbackEl) return;
+    feedbackEl.textContent = msg;
+    feedbackEl.style.color = isError ? 'var(--error-color)' : 'var(--primary)';
+    setTimeout(() => { feedbackEl.textContent = ''; }, 2500);
+  };
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(
+      () => showFeedback('✓ Đã sao chép!', false),
+      () => {
+        // Fallback
+        fallbackCopy(text, showFeedback);
+      }
+    );
+  } else {
+    fallbackCopy(text, showFeedback);
+  }
+}
+
+function fallbackCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+    cb('✓ Đã sao chép!', false);
+  } catch (e) {
+    cb('✗ Sao chép thất bại', true);
+  }
+  document.body.removeChild(ta);
+}
+
+/**
+ * Prefill form fields from URL query parameters
+ */
+function prefillFromURL(form) {
+  const params = new URLSearchParams(window.location.search);
+  if (!params.toString()) return;
+
+  params.forEach((value, key) => {
+    const el = form.querySelector(`[name="${key}"]`);
+    if (el) {
+      el.value = value;
+    }
+  });
+
+  // Trigger preview update after prefill
+  updatePreview();
 }
