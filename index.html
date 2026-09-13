@@ -3,14 +3,29 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>KKAT — Form</title>
+  <title>KKAT — Form cấu hình</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main>
-    <h1>KKAT — Form cấu hình</h1>
-    <div id="form-root"></div>
+  <header class="page-header">
+    <div class="header-content">
+      <h1>KKAT — Form cấu hình</h1>
+      <p class="subtitle">Tạo thiệp chúc mỹ cá nhân hóa</p>
+    </div>
+  </header>
+
+  <main class="page-main">
+    <section class="form-section" aria-labelledby="form-heading">
+      <h2 id="form-heading" class="visually-hidden">Form nhập liệu</h2>
+      <div id="form-root"></div>
+    </section>
   </main>
+
+  <footer class="page-footer">
+    <div class="footer-content">
+      <p>&copy; 2026 KKAT. Thiết kế với sự chăm chút.</p>
+    </div>
+  </footer>
 
   <!-- Load project config first -->
   <script src="config.js"></script>
